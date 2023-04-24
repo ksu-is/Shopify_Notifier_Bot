@@ -8,7 +8,7 @@ def read_state_file(json_file,dict_key):
         return states_dict[dict_key]
 
     else:
-        return "None"
+        return "New Item"
 
 def write_state_file(json_file,dict_key,value):
     with open (json_file, "r") as states:
@@ -22,8 +22,13 @@ def write_state_file(json_file,dict_key,value):
 def find_item_state(item,stock_state):
     item_list_combined = "".join(item)
 
-    if stock_state == read_state_file("stock_state.json",item_list_combined):
+    read_stock = read_state_file("stock_state.json",item_list_combined)
+
+    if stock_state == read_stock:
         return False
+    elif read_stock == "New Item":
+        write_state_file("stock_state.json",item_list_combined,stock_state)
+        return None
     else:
         write_state_file("stock_state.json",item_list_combined,stock_state)
         return True

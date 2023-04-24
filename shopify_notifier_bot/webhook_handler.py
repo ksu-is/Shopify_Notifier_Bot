@@ -11,12 +11,13 @@ def fix_nonetypes(json_item):
 def webhook_sender(item,stock_state,stock_info,link,url):
     if stock_state == True and stock_info == "True":
         content = config_handler.read("config.cfg","webhook","in_stock_message")
-        print("Hit1")
     elif stock_state == True and stock_info == "False":
         content = config_handler.read("config.cfg","webhook","out_of_stock_message")
-        print("Hit2")
+    elif stock_state == None and stock_info == "True":
+        content = config_handler.read("config.cfg","webhook","new_item_in_stock_message")
+    elif stock_state == None and stock_info == "False":
+        content = config_handler.read("config.cfg","webhook","new_item_out_of_stock_message")
     else:
-        print("Hit3", stock_state, stock_info)
         return
 
     variable_dict = {
