@@ -8,29 +8,35 @@ def fix_nonetypes(json_item):
     except TypeError:
         return ""
 
-def webhook_sender(item,stock_state,link,url):
-    if stock_state == True:
+def webhook_sender(item,stock_state,stock_info,link,url):
+    if stock_state == True and stock_info == "True":
+        content = config_handler.read("config.cfg","webhook","in_stock_message")
+        print("Hit1")
+    elif stock_state == True and stock_info == "False":
+        content = config_handler.read("config.cfg","webhook","out_of_stock_message")
+        print("Hit2")
+    else:
+        print("Hit3", stock_state, stock_info)
+        return
 
-        content = config_handler.read("config.cfg","webhook","content")
+    variable_dict = {
+        "{Name}" : fix_nonetypes(item['name']),
+        "{Title}" : fix_nonetypes(item['title']),
+        "{SKU}" : fix_nonetypes(item['sku']),
+        "{Public Title}" : fix_nonetypes(item['public_title']),
+        "{Option1}" : fix_nonetypes(item['option1']),
+        "{Option2}" : fix_nonetypes(item['option2']),
+        "{Option3}" : fix_nonetypes(item['option3']),
+        "{Link}" : link,
+    }
 
-        variable_dict = {
-            "{Name}" : fix_nonetypes(item['name']),
-            "{Title}" : fix_nonetypes(item['title']),
-            "{SKU}" : fix_nonetypes(item['sku']),
-            "{Public Title}" : fix_nonetypes(item['public_title']),
-            "{Option1}" : fix_nonetypes(item['option1']),
-            "{Option2}" : fix_nonetypes(item['option2']),
-            "{Option3}" : fix_nonetypes(item['option3']),
-            "{Link}" : link,
-        }
+    for key in variable_dict.keys():
+        content = re.sub(key, variable_dict[key], content)
 
-        for key in variable_dict.keys():
-            content = re.sub(key, variable_dict[key], content)
+    content = content.replace(r'\n', '\n')
 
-        content = content.replace(r'\n', '\n')
+    data = {
+        "content" : content
+    }
 
-        data = {
-            "content" : content
-        }
-
-        requests.post(url,json=data)
+    requests.post(url,json=data)

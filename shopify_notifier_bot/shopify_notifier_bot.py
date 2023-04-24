@@ -24,10 +24,11 @@ def find_variants(url):
 def stock_info_handling(stock_info,stock_state_id,item_info,link):
     if stock_info == "True":
         stock_state = stock_state_tracker.find_item_state(stock_state_id,"True")
-        webhook_handler.webhook_sender(item_info,stock_state,link,url)
+        webhook_handler.webhook_sender(item_info,stock_state,stock_info,link,url)
 
-    else:
-        stock_state_tracker.find_item_state(stock_state_id,"False")
+    elif stock_info == "False":
+        stock_state = stock_state_tracker.find_item_state(stock_state_id,"False")
+        webhook_handler.webhook_sender(item_info,stock_state,stock_info,link,url)
         
 def stock_check_runner(request_data):
     variant_check = find_variants(request_data)

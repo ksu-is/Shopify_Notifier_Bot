@@ -8,12 +8,7 @@ def read_state_file(json_file,dict_key):
         return states_dict[dict_key]
 
     else:
-        states_dict[dict_key] = "False"
-        
-        with open (json_file, "w") as states:
-            json.dump(states_dict, states)
-
-        return "False"
+        return "None"
 
 def write_state_file(json_file,dict_key,value):
     with open (json_file, "r") as states:
