@@ -5,6 +5,7 @@ import json
 import webhook_handler
 import config_handler
 import stock_state_tracker
+from datetime import datetime,timezone
 
 stock_delay = config_handler.read("config.cfg","stock","stock_delay")
 
@@ -47,5 +48,12 @@ with open("list.txt", "r") as urlListRaw:
 urlList = list(map(str.strip, urlListLines))
 
 while True:
-    for item in urlList:
-        stock_check_runner(item)
+    try:
+        for item in urlList:
+            stock_check_runner(item)
+    except Exception as e:
+        utc_time = datetime.now(timezone.utc).strftime("%Y-%m-%d_%H-%M-%S")
+        with open ("error_log.txt", "a") as log_file:
+            log_file.write("\n")
+            log_file.write(utc_time + ", ")
+            log_file.write(str(e))
