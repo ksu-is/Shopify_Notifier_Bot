@@ -6,3 +6,4 @@
 - [x] Allow configuring webhook url and delays
 - [x] Add customizeable stock messages
 - [x] Notifications when an item goes out of stock
+- [x] Notifications when a new variant of an item is added
