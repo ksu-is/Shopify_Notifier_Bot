@@ -33,6 +33,8 @@ def webhook_sender(item,stock_state,stock_info,link,url):
         "{Link}" : link,
     }
 
+    content = config_handler.read("config.cfg","webhook","stock_message")
+
     for key in variable_dict.keys():
         content = re.sub(key, variable_dict[key], content)
 
