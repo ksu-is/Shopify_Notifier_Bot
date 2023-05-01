@@ -9,18 +9,20 @@ def fix_nonetypes(json_item):
         return ""
 
 def webhook_sender(item,stock_state,stock_info,link,url):
-    if stock_state == True and stock_info == "True":
-        content = config_handler.read("config.cfg","webhook","in_stock_message")
-    elif stock_state == True and stock_info == "False":
-        content = config_handler.read("config.cfg","webhook","out_of_stock_message")
-    elif stock_state == None and stock_info == "True":
-        content = config_handler.read("config.cfg","webhook","new_item_in_stock_message")
-    elif stock_state == None and stock_info == "False":
-        content = config_handler.read("config.cfg","webhook","new_item_out_of_stock_message")
-    else:
+    if stock_state == False:
         return
 
+    stock_change = ""
+    if stock_state == None:
+        stock_change += "New item "
+    if stock_info == "True":
+        stock_change += "in stock!"
+    elif stock_info == "False":
+        stock_change != "out of stock!"
+    stock_change = stock_change.capitalize()
+
     variable_dict = {
+        "{Stock Change}" : stock_change,
         "{Name}" : fix_nonetypes(item['name']),
         "{Title}" : fix_nonetypes(item['title']),
         "{SKU}" : fix_nonetypes(item['sku']),
