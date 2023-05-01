@@ -1,14 +1,19 @@
 import json
 
 def read_state_file(json_file,dict_key):
-    with open (json_file, "r") as states:
-        states_dict = json.load(states)
+    try:
+        with open (json_file, "r") as states:
+            states_dict = json.load(states)
 
-    if dict_key in states_dict:
-        return states_dict[dict_key]
+        if dict_key in states_dict:
+            return states_dict[dict_key]
 
-    else:
-        return "New Item"
+        else:
+            return "New Item"
+    except Exception:
+        with open (json_file, "w") as fix_states:
+            fix_states.write("{}")
+            read_state_file(json_file,dict_key)
 
 def write_state_file(json_file,dict_key,value):
     with open (json_file, "r") as states:
