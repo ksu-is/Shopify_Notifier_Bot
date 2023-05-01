@@ -1,3 +1,4 @@
+import sys
 import requests
 import re
 import time
@@ -42,6 +43,11 @@ def stock_check_runner(request_data):
             stock_info_handling(str(item['available']),request_data + "_" + str(item['id']),item,request_data)
 
     time.sleep(float(stock_delay))
+
+if re.search("^(?:http|ftp)s?://(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|localhost|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::\d+)?(?:/?|[/?]\S+)$", url, flags=re.IGNORECASE) == None:
+    print("Webhook url not detected, exiting.")
+    time.sleep(10)
+    sys.exit()
 
 with open("list.txt", "r") as urlListRaw:
     urlListLines = urlListRaw.readlines()
